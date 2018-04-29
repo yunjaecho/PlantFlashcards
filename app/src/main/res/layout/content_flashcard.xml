@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".FlashcardActivity"
+    tools:context="yunjae.com.plantflashcards.FlashcardActivity"
     tools:showIn="@layout/activity_flashcard">
 
     <LinearLayout
@@ -19,13 +19,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageSwitcher">
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
 
         <Button
             android:id="@+id/button1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="onButton1Clicked"
             android:text="Button" />
 
         <Button
@@ -50,14 +51,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onButton4Clicked"
-            android:text="Button" />
+            android:text="Photo" />
 
         <TextView
             android:id="@+id/txtStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:text="" />
 
     </LinearLayout>
 
@@ -65,13 +66,12 @@
         android:id="@+id/imageView"
         android:layout_width="368dp"
         android:layout_height="200dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent">
 
+    </ImageView>
 </android.support.constraint.ConstraintLayout>
