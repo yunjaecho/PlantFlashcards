@@ -6,16 +6,14 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
-import android.provider.MediaStore
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
 
 import kotlinx.android.synthetic.main.activity_flashcard.*
 import kotlinx.android.synthetic.main.content_flashcard.*
+import yunjae.com.plantflashcards.dao.NetworkDAO
 import yunjae.com.plantflashcards.dto.Plant
 import yunjae.com.plantflashcards.service.PlantService
 
@@ -24,6 +22,8 @@ class FlashcardActivity : AppCompatActivity() {
     val CAMEMA_ACTIVITY_REQUEST: Int = 10
     var allPlants: List<Plant> = ArrayList<Plant>()
     var correctAnswer: Int = 0
+    var answerCorrectly = 0
+    var answerIncorrectly = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,23 +39,33 @@ class FlashcardActivity : AppCompatActivity() {
         fab.setOnClickListener{
             val getPlantsTask = GetPlantsTask()
             getPlantsTask.execute("")
+            button1.setBackgroundColor(Color.LTGRAY)
+            button2.setBackgroundColor(Color.LTGRAY)
+            button3.setBackgroundColor(Color.LTGRAY)
+            button4.setBackgroundColor(Color.LTGRAY)
         }
 
     }
 
-    private fun evalute(guessedAnswer: Int) {
-        when(guessedAnswer) {
+    private fun evalute(guess: Int) {
+        when(correctAnswer) {
             0 -> button1.setBackgroundColor(Color.GREEN)
             1 -> button2.setBackgroundColor(Color.GREEN)
             2 -> button3.setBackgroundColor(Color.GREEN)
             3 -> button4.setBackgroundColor(Color.GREEN)
         }
 
-        if (guessedAnswer == correctAnswer) {
+        if (guess == correctAnswer) {
             txtStatus.setText("Correct!")
+            answerCorrectly++;
+
+            txtCorrectAnswers?.setText("$answerCorrectly")
+
         } else {
             val correct = allPlants.get(correctAnswer).toString()
             txtStatus.setText("Incorrect. The correct plant is : $correct")
+            answerIncorrectly++;
+            txtWrongAnswers.setText("$answerIncorrectly")
         }
     }
 
@@ -148,9 +158,15 @@ class FlashcardActivity : AppCompatActivity() {
                 button4.text = result?.get(3).toString()
 
                 correctAnswer = (Math.random() * 4).toInt()
+
+                val getPhotoTask = GetPhotoTask()
+                val bitmap = getPhotoTask.execute(result?.get(correctAnswer)?.photoName)
+                imageView.setImageBitmap(bitmap.get())
+
+                allPlants = result!!
             }
 
-            allPlants = result!!
+
         }
 
         /**
@@ -163,6 +179,16 @@ class FlashcardActivity : AppCompatActivity() {
             val plantService = PlantService()
 
             return plantService.parsePlantsFromJsonData(difficulty)
+        }
+
+    }
+
+    inner class GetPhotoTask: AsyncTask<String, Int, Bitmap>() {
+
+        override fun doInBackground(vararg picture: String?): Bitmap? {
+            val networkDAO = NetworkDAO()
+            val bitmap = networkDAO.populatePicture(picture[0])
+            return bitmap
         }
 
     }

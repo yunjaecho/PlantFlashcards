@@ -26,6 +26,7 @@ class PlantService {
                 plant.species = getString("species")
                 plant.cultivar = getString("cultivar")
                 plant.common = getString("common")
+                plant.photoName = getString("picture_name")
 
                 //"id":"24","plant":"9","genus":"Koelreuteria","species":"paniculata","cultivar":"","common":"Golden Rain Tree","picture_name":"Koelreuteria_paniculata_branch.JPG","description":"Branch of Koelreuteria paniculata","difficulty":"3","photo_credit":""
             }
